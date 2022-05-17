@@ -12,7 +12,7 @@ import java.io.IOException;
 
 public class MainServlet extends HttpServlet {
   private static final String API_POSTS_PATH = "/api/posts";
-  private static final String API_PIST_ID = "/api/posts/\\d+";
+  private static final String API_POST_ID = "/api/posts/\\d+";
   private static final String SLASH = "/";
   private PostController controller;
 
@@ -24,14 +24,13 @@ public class MainServlet extends HttpServlet {
   }
 
    @Override
-  protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+  public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     final var path = req.getRequestURI();
     if (path.equals(API_POSTS_PATH)) {
       controller.all(resp);
       return;
     }
-    if (path.matches(API_PIST_ID)) {
-      // easy way
+    if (path.equals(API_POST_ID)) {
       final var id = Long.parseLong(path.substring(path.lastIndexOf(SLASH)));
       controller.getById(id, resp);
       return;
@@ -52,7 +51,7 @@ public class MainServlet extends HttpServlet {
   @Override
   protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     final var path = req.getRequestURI();
-    if (path.matches(API_PIST_ID)) {
+    if (path.matches(API_POST_ID)) {
       // easy way
       final var id = Long.parseLong(path.substring(path.lastIndexOf(SLASH)));
       controller.removeById(id, resp);
